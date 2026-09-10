@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+ * Theme tokens — day (light) is the default, night (dark) is opt-in.
+ * Values are RGB triplets so Tailwind opacity modifiers (bg-power/10 etc.)
+ * keep working through `rgb(var(--x) / <alpha-value>)`.
+ * ------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+
+  --bg: 242 245 243; /* soft green-white */
+  --surface: 255 255 255;
+  --surface-2: 246 248 247;
+  --surface-3: 236 241 238;
+  --edge: 214 224 218;
+  --edge-soft: 228 235 230;
+  --ink: 20 32 26;
+  --muted: 92 113 104;
+  --dim: 140 163 154;
+
+  --power: 13 148 116; /* darker teal for contrast on light */
+  --irr: 197 126 10; /* darker amber */
+  --warn: 194 98 11;
+  --critical: 220 38 38;
+
+  --tile-highlight: rgba(255, 255, 255, 0.6);
+  --tile-shadow: rgba(16, 32, 26, 0.08);
+  --glow-ring: rgba(13, 148, 116, 0.25);
+  --glow-spread: rgba(13, 148, 116, 0.25);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: 11 18 16; /* graphite-green, never pure black */
+  --surface: 18 27 24;
+  --surface-2: 24 35 30;
+  --surface-3: 30 44 37;
+  --edge: 34 48 41;
+  --edge-soft: 27 38 31;
+  --ink: 232 240 236;
+  --muted: 140 163 154;
+  --dim: 92 113 104;
+
+  --power: 45 212 168;
+  --irr: 245 185 66;
+  --warn: 242 169 59;
+  --critical: 229 72 77;
+
+  --tile-highlight: rgba(232, 240, 236, 0.04);
+  --tile-shadow: rgba(0, 0, 0, 0.35);
+  --glow-ring: rgba(45, 212, 168, 0.28);
+  --glow-spread: rgba(45, 212, 168, 0.35);
+}
+
+html,
+body,
+#__next {
+  height: 100%;
+}
+
+body {
+  @apply bg-bg text-ink antialiased;
+  font-feature-settings: 'cv02', 'cv03', 'cv04';
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Thin, theme-aware scrollbars (tables, alert lists). */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--edge)) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgb(var(--edge));
+  border-radius: 9999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::selection {
+  background: rgba(45, 212, 168, 0.28);
+}
+
+/* Tabular numerals so KPI readouts don't jitter while counting up. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
