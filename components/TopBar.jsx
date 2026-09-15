@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Icon } from './common';
 import { useTheme } from '../lib/theme';
 
@@ -72,6 +73,33 @@ function ThemeToggle() {
   );
 }
 
+/* Clears the session cookie and returns to the sign-in screen. */
+function LogoutButton() {
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+  const signOut = async () => {
+    setBusy(true);
+    try {
+      await fetch('/api/logout', { method: 'POST' });
+    } catch (_) {
+      /* leave anyway — middleware will bounce the next request */
+    }
+    router.replace('/login');
+  };
+  return (
+    <button
+      type="button"
+      onClick={signOut}
+      disabled={busy}
+      title="Sign out"
+      aria-label="Sign out"
+      className="flex h-11 w-11 items-center justify-center rounded-full border border-edge bg-surface-2 text-muted transition-colors hover:border-critical/60 hover:text-critical disabled:opacity-60"
+    >
+      <Icon name="logout" className="h-5 w-5" />
+    </button>
+  );
+}
+
 /* Top bar: plant identity + live clock + feed/night status + refresh. */
 export default function TopBar({ stats, syncedAgo, remainingMs, totalMs, refreshing, nightMode, onRefresh }) {
   const feedOk = stats && stats.feedStatus === 'ok';
@@ -105,6 +133,7 @@ export default function TopBar({ stats, syncedAgo, remainingMs, totalMs, refresh
         <span className="hidden text-xs text-muted lg:block">synced {syncedAgo}s ago</span>
         <LiveClock />
         <ThemeToggle />
+        <LogoutButton />
         <RefreshRing remainingMs={remainingMs} totalMs={totalMs} refreshing={refreshing} onRefresh={onRefresh} />
       </div>
     </header>

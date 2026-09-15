@@ -23,6 +23,7 @@ export function Icon({ name, className = 'h-4 w-4' }) {
     x: 'M18 6 6 18M6 6l12 12',
     chevronUp: 'M6 4v10M3.5 3.5h9',
     chevronDown: 'M6 21.7V13.3M3.5 17.5h9',
+    logout: 'M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3',
   };
   const d = paths[name] || paths.zap;
   return (

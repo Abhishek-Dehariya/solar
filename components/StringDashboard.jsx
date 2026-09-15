@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import {
   POLL_INTERVAL_MS,
   METRICS,
@@ -25,6 +26,7 @@ import { Icon, Spinner } from './common';
  * ------------------------------------------------------------------------- */
 
 export default function StringDashboard() {
+  const router = useRouter();
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -51,6 +53,10 @@ export default function StringDashboard() {
     if (showSpinner) setRefreshing(true);
     try {
       const res = await fetch('/api/esenz-live', { cache: 'no-store' });
+      if (res.status === 401) {
+        router.replace('/login');
+        return;
+      }
       if (!res.ok) {
         let message = `Request failed (HTTP ${res.status})`;
         try {
@@ -71,7 +77,7 @@ export default function StringDashboard() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, []);
+  }, [router]);
 
   // Initial load + 60s poll.
   useEffect(() => {
